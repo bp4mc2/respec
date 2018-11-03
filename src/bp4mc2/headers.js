@@ -325,7 +325,8 @@ export function run(conf) {
   if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
   if (conf.isRegular)
     conf.latestVersion =
-      "https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";
+      "http://bp4mc2.org"
+      //"https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";
   if (conf.isTagFinding) {
     conf.latestVersion = "https://www.w3.org/2001/tag/doc/" + conf.shortName;
     conf.thisVersion =

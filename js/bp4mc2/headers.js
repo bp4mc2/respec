@@ -216,7 +216,8 @@ define(["exports", "core/utils", "core/pubsubhub", "w3c/templates/cgbg-sotd", "w
     if (conf.specStatus === "Member-SUBM") publishSpace = "Submission";else if (conf.specStatus === "Team-SUBM") publishSpace = "TeamSubmission";
     if (conf.isRegular) conf.thisVersion = "https://www.w3.org/" + publishSpace + "/" + conf.publishDate.getUTCFullYear() + "/" + conf.maturity + "-" + conf.shortName + "-" + (0, _utils.concatDate)(conf.publishDate) + "/";
     if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
-    if (conf.isRegular) conf.latestVersion = "https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";
+    if (conf.isRegular) conf.latestVersion = "http://bp4mc2.org";
+    //"https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";
     if (conf.isTagFinding) {
       conf.latestVersion = "https://www.w3.org/2001/tag/doc/" + conf.shortName;
       conf.thisVersion = conf.latestVersion + "-" + _utils.ISODate.format(conf.publishDate);
