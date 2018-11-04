@@ -13,6 +13,27 @@ marked.setOptions({
   headerIds: false,
 });
 
+var renderer = new marked.Renderer();
+
+renderer.table = function(header, body) {
+  if (body) body = '<tbody>' + body + '</tbody>';
+
+  var cssclass = header.replace(/^.*!([^!]+)!.*$/gm, "$1");
+
+  var tablenode = '<table>\n';
+  if (cssclass) {
+    tablenode = '<table class="' + cssclass + '">\n';
+    header = header.replace(/![^!]*!/gm, "");
+  }
+
+  return tablenode
+    + '<thead>\n'
+    + header
+    + '</thead>\n'
+    + body
+    + '</table>\n';
+};
+
 const spaceOrTab = /^[ |\t]*/;
 const endsWithSpace = /\s+$/gm;
 const dashes = /-/g;
@@ -26,7 +47,7 @@ export function markdownToHtml(text) {
   const potentialMarkdown = normalizedLeftPad
     .replace(gtEntity, ">")
     .replace(ampEntity, "&");
-  const result = marked(potentialMarkdown);
+  const result = marked(potentialMarkdown,{renderer: renderer});
   return result;
 }
 
