@@ -37,6 +37,7 @@ renderer.table = function(header, body) {
 const spaceOrTab = /^[ |\t]*/;
 const endsWithSpace = /\s+$/gm;
 const dashes = /-/g;
+const ltEntity = /&lt;/gm;
 const gtEntity = /&gt;/gm;
 const ampEntity = /&amp;/gm;
 
@@ -45,6 +46,7 @@ export function markdownToHtml(text) {
   // As markdown is pulled from HTML, > and & are already escaped and
   // so blockquotes aren't picked up by the parser. This fixes it.
   const potentialMarkdown = normalizedLeftPad
+    .replace(ltEntity, "<")
     .replace(gtEntity, ">")
     .replace(ampEntity, "&");
   const result = marked(potentialMarkdown,{renderer: renderer});
