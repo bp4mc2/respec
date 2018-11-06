@@ -311,17 +311,8 @@ export function run(conf) {
   else if (conf.specStatus === "Team-SUBM") publishSpace = "TeamSubmission";
   if (conf.isRegular)
     conf.thisVersion =
-      "https://www.w3.org/" +
-      publishSpace +
-      "/" +
-      conf.publishDate.getUTCFullYear() +
-      "/" +
-      conf.maturity +
-      "-" +
-      conf.shortName +
-      "-" +
-      concatDate(conf.publishDate) +
-      "/";
+      "https://bp4mc2.org/" +
+      concatDate(conf.publishDate);
   if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
   if (conf.isRegular)
     conf.latestVersion =
@@ -354,15 +345,8 @@ export function run(conf) {
       conf.prevVersion = "";
     } else {
       conf.prevVersion =
-        "https://www.w3.org/TR/" +
-        conf.previousPublishDate.getUTCFullYear() +
-        "/" +
-        pmat +
-        "-" +
-        conf.shortName +
-        "-" +
-        concatDate(conf.previousPublishDate) +
-        "/";
+        "http://bp4mc2.org/" +
+        concatDate(conf.previousPublishDate);
     }
   } else {
     if (

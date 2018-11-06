@@ -35,7 +35,7 @@ define(["exports", "core/linter", "core/linter-rules/no-headingless-sections", "
   const name = exports.name = "bp4mc2/defaults";
 
 
-  _linter2.default.register(_noHttpProps.rule, _privsecSection.rule, _noHeadinglessSections.rule, _checkPunctuation.rule, _localRefsExist.rule);
+  _linter2.default.register(_noHttpProps.rule, _noHeadinglessSections.rule, _checkPunctuation.rule, _localRefsExist.rule);
 
   const cgbg = new Set(["BG-DRAFT", "BG-FINAL", "CG-DRAFT", "CG-FINAL"]);
   const licenses = new Map([["cc0", {

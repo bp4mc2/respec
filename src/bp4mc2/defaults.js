@@ -11,7 +11,7 @@ import { rule as localRefsExist } from "core/linter-rules/local-refs-exist";
 
 linter.register(
   noHttpPropsRule,
-  privsecSectionRule,
+//  privsecSectionRule,
   noHeadinglessSectionsRule,
   checkPunctuation,
   localRefsExist

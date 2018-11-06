@@ -214,7 +214,7 @@ define(["exports", "core/utils", "core/pubsubhub", "w3c/templates/cgbg-sotd", "w
     conf.maturity = status2maturity[conf.specStatus] ? status2maturity[conf.specStatus] : conf.specStatus;
     let publishSpace = "TR";
     if (conf.specStatus === "Member-SUBM") publishSpace = "Submission";else if (conf.specStatus === "Team-SUBM") publishSpace = "TeamSubmission";
-    if (conf.isRegular) conf.thisVersion = "https://www.w3.org/" + publishSpace + "/" + conf.publishDate.getUTCFullYear() + "/" + conf.maturity + "-" + conf.shortName + "-" + (0, _utils.concatDate)(conf.publishDate) + "/";
+    if (conf.isRegular) conf.thisVersion = "https://bp4mc2.org/" + (0, _utils.concatDate)(conf.publishDate);
     if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
     if (conf.isRegular) conf.latestVersion = "http://bp4mc2.org";
     //"https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";
@@ -237,7 +237,7 @@ define(["exports", "core/utils", "core/pubsubhub", "w3c/templates/cgbg-sotd", "w
       } else if (conf.isBasic) {
         conf.prevVersion = "";
       } else {
-        conf.prevVersion = "https://www.w3.org/TR/" + conf.previousPublishDate.getUTCFullYear() + "/" + pmat + "-" + conf.shortName + "-" + (0, _utils.concatDate)(conf.previousPublishDate) + "/";
+        conf.prevVersion = "http://bp4mc2.org/" + (0, _utils.concatDate)(conf.previousPublishDate);
       }
     } else {
       if (!/NOTE$/.test(conf.specStatus) && conf.specStatus !== "FPWD" && conf.specStatus !== "FPLC" && conf.specStatus !== "ED" && !conf.noRecTrack && !conf.isNoTrack && !conf.isSubmission) (0, _pubsubhub.pub)("error", "Document on track but no previous version:" + " Add `previousMaturity`, and `previousPublishDate` to ReSpec's config.");
