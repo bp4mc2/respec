@@ -120,7 +120,7 @@ export default conf => {
     ${
       conf.showPreviousVersion
         ? html`
-      <dt>Previous version:</dt>
+      <dt>${conf.l10n.previous_version}</dt>
       <dd><a href='${conf.prevVersion}'>${conf.prevVersion}</a></dd>
     `
         : ""

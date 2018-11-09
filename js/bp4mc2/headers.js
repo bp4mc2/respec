@@ -214,7 +214,7 @@ define(["exports", "core/utils", "core/pubsubhub", "w3c/templates/cgbg-sotd", "w
     conf.maturity = status2maturity[conf.specStatus] ? status2maturity[conf.specStatus] : conf.specStatus;
     let publishSpace = "TR";
     if (conf.specStatus === "Member-SUBM") publishSpace = "Submission";else if (conf.specStatus === "Team-SUBM") publishSpace = "TeamSubmission";
-    if (conf.isRegular) conf.thisVersion = "https://bp4mc2.org/" + (0, _utils.concatDate)(conf.publishDate);
+    if (conf.isRegular) conf.thisVersion = "http://bp4mc2.org/" + (0, _utils.concatDate)(conf.publishDate);
     if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
     if (conf.isRegular) conf.latestVersion = "http://bp4mc2.org";
     //"https://www.w3.org/" + publishSpace + "/" + conf.shortName + "/";

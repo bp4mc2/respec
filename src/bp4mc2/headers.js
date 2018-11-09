@@ -311,7 +311,7 @@ export function run(conf) {
   else if (conf.specStatus === "Team-SUBM") publishSpace = "TeamSubmission";
   if (conf.isRegular)
     conf.thisVersion =
-      "https://bp4mc2.org/" +
+      "http://bp4mc2.org/" +
       concatDate(conf.publishDate);
   if (conf.specStatus === "ED") conf.thisVersion = conf.edDraftURI;
   if (conf.isRegular)

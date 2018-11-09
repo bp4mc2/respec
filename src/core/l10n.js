@@ -55,6 +55,7 @@ const base = {
   this_version: "This version:",
   toc: "Table of Contents",
   warning: "Warning",
+  previous_version: "Previous Version"
 };
 
 const ko = {
@@ -132,6 +133,7 @@ const nl = {
   this_version: "Deze versie:",
   toc: "Inhoudsopgave",
   warning: "Waarschuwing",
+  previous_version: "Vorige versie"
 };
 
 const es = {
