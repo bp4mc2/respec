@@ -25,20 +25,20 @@ renderer.table = function(header, body) {
   var anchor = header.replace(/^.*#([^!]+)!.*$/gs, "$1");
   if (header.match(/^.*#([^!]+)!.*$/gs)) {
     cssclass = cssclass.replace(/#[^!]+/gs,"");
-    anchor = '<a href="' + anchor + '"></a>';
+    anchor = ' id="' + anchor + '"';
   } else {
     anchor = "";
   }
 
   var tablenode = '<table>\n';
   if (header.match(/^.*!([^!]+)!.*$/gs)) {
-    tablenode = '<table class="' + cssclass + '">\n';
+    tablenode = '<table' + anchor + ' class="' + cssclass + '">\n';
     header = header.replace(/![^!]*!/gs, "");
   }
 
   return tablenode
     + '<thead>\n'
-    + header.replace(/<tr>\n<th>([^<]*)<\/th>/gs,"<tr>\n<th>" + anchor + "$1</th>")
+    + header
     + '</thead>\n'
     + body
     + '</table>\n';
