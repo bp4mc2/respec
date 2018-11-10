@@ -18,17 +18,27 @@ var renderer = new marked.Renderer();
 renderer.table = function(header, body) {
   if (body) body = '<tbody>' + body + '</tbody>';
 
-  var cssclass = header.replace(/^.*!([^!]+)!.*$/gm, "$1");
+  console.log("@@@\n"+header+"\n@@@@\n");
+
+  var cssclass = header.replace(/^.*!([^!]+)!.*$/gs, "$1");
+  console.log("####>"+cssclass+"<\n");
+  var anchor = header.replace(/^.*#([^!]+)!.*$/gs, "$1");
+  if (header.match(/^.*#([^!]+)!.*$/gs)) {
+    cssclass = cssclass.replace(/#[^!]+/gs,"");
+    anchor = '<a href="' + anchor + '"></a>';
+  } else {
+    anchor = "";
+  }
 
   var tablenode = '<table>\n';
-  if (cssclass) {
+  if (header.match(/^.*!([^!]+)!.*$/gs)) {
     tablenode = '<table class="' + cssclass + '">\n';
-    header = header.replace(/![^!]*!/gm, "");
+    header = header.replace(/![^!]*!/gs, "");
   }
 
   return tablenode
     + '<thead>\n'
-    + header
+    + header.replace(/<tr>\n<th>([^<]*)<\/th>/gs,"<tr>\n<th>" + anchor + "$1</th>")
     + '</thead>\n'
     + body
     + '</table>\n';
