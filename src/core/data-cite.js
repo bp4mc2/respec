@@ -13,8 +13,9 @@
  * Usage:
  * https://github.com/w3c/respec/wiki/data--cite
  */
-import { resolveRef, updateFromNetwork } from "core/biblio";
-import { showInlineError, refTypeFromContext } from "core/utils";
+import { refTypeFromContext, showInlineError, wrapInner } from "./utils";
+import { resolveRef, updateFromNetwork } from "./biblio";
+import hyperHTML from "../deps/hyperhtml";
 export const name = "core/data-cite";
 
 function requestLookup(conf) {
@@ -24,7 +25,7 @@ function requestLookup(conf) {
     const { key, frag, path } = toCiteDetails(elem);
     let href = "";
     // This is just referring to this document
-    if (key === conf.shortName) {
+    if (key.toLowerCase() === conf.shortName.toLowerCase()) {
       href = document.location.href;
     } else {
       // Let's go look it up in spec ref...
@@ -50,12 +51,7 @@ function requestLookup(conf) {
         break;
       }
       case "dfn": {
-        const a = elem.ownerDocument.createElement("a");
-        a.href = href;
-        while (elem.firstChild) {
-          a.appendChild(elem.firstChild);
-        }
-        elem.appendChild(a, elem);
+        wrapInner(elem, hyperHTML`<a href="${href}"></a>`);
         break;
       }
     }
@@ -110,6 +106,10 @@ export async function run(conf) {
   Array.from(document.querySelectorAll(["dfn[data-cite], a[data-cite]"]))
     .filter(el => el.dataset.cite)
     .map(toCiteDetails)
+    // it's not the same spec
+    .filter(({ key }) => {
+      return key.toLowerCase() !== (conf.shortName || "").toLowerCase();
+    })
     .forEach(({ isNormative, key }) => {
       const refSink = isNormative
         ? conf.normativeReferences

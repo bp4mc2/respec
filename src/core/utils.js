@@ -3,8 +3,8 @@
 // Module core/utils
 // As the name implies, this contains a ragtag gang of methods that just don't fit
 // anywhere else.
-import { pub } from "core/pubsubhub";
-import marked from "deps/marked";
+import marked from "../deps/marked";
+import { pub } from "./pubsubhub";
 export const name = "core/utils";
 
 marked.setOptions({
@@ -597,20 +597,16 @@ export async function fetchAndCache(request, maxAge = 86400000) {
 /**
  * Spreads one iterable into another.
  *
- * @param {Iterable} collector
- * @param {any|Iterable} item
+ * @param {Array} collector
+ * @param {any|Array} item
  * @returns {Array}
  */
 export function flatten(collector, item) {
-  const isObject = typeof item === "object";
-  const isIterable =
-    Object(item)[Symbol.iterator] && typeof item.values === "function";
-  const items = !isObject
+  const items = !Array.isArray(item)
     ? [item]
-    : isIterable
-      ? [...item.values()].reduce(flatten, [])
-      : Object.values(item);
-  return [...collector, ...items];
+    : [...item.values()].reduce(flatten, []);
+  collector.push(...items);
+  return collector;
 }
 
 // --- DOM HELPERS -------------------------------
@@ -621,7 +617,7 @@ export function flatten(collector, item) {
  * @param {Element} elem element
  * @param {String} pfx prefix
  * @param {String} txt text
- * @param {Boolean} noLC
+ * @param {Boolean} noLC do not convert to lowercase
  * @returns {String} generated (or existing) id for element
  */
 export function addId(elem, pfx = "", txt = "", noLC = false) {
@@ -691,7 +687,7 @@ export function getTextNodes(el, exclusions = []) {
  *   the algorithm used for determining the actual title of a
  *   <dfn> element (but can apply to other as well).
  * if args.isDefinition is true, then the element is a definition, not a
- *   reference to a definition. Any @title or @lt will be replaced with
+ *   reference to a definition. Any @title will be replaced with
  *   @data-lt to be consistent with Bikeshed / Shepherd.
  * This method now *prefers* the data-lt attribute for the list of
  *   titles. That attribute is added by this method to dfn elements, so
@@ -746,7 +742,7 @@ export function getDfnTitles(elem, args) {
 /**
  * For an element (usually <a>), returns an array of targets that
  * element might refer to, of the form
- * @typedef {for: 'interfacename', title: 'membername'} LinkTarget
+ * @typedef {{for: string, title: string}} LinkTarget
  *
  * For an element like:
  *  <p link-for="Int1"><a for="Int2">Int3.member</a></p>
@@ -785,14 +781,11 @@ export function renameElement(elem, newName) {
   if (elem.localName === newName) return elem;
   const newElement = elem.ownerDocument.createElement(newName);
   // copy attributes
-  for (const attribute of [...elem.attributes]) {
-    const { name, value } = attribute;
+  for (const { name, value } of elem.attributes) {
     newElement.setAttribute(name, value);
   }
   // copy child nodes
-  while (elem.firstChild) {
-    newElement.appendChild(elem.firstChild);
-  }
+  newElement.append(...elem.childNodes);
   elem.replaceWith(newElement);
   return newElement;
 }
@@ -819,4 +812,15 @@ export function refTypeFromContext(ref, element) {
   }
   const type = isInformative ? "informative" : "normative";
   return { type, illegal: false };
+}
+
+/**
+ * Wraps inner contents with the wrapper node
+ * @param {Node} outer outer node to be modified
+ * @param {Node} wrapper wrapper node to be appended
+ */
+export function wrapInner(outer, wrapper) {
+  wrapper.append(...outer.childNodes);
+  outer.appendChild(wrapper);
+  return outer;
 }
