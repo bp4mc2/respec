@@ -1,35 +1,42 @@
-define(["exports", "core/utils", "core/pubsubhub"], function (exports, _utils, _pubsubhub) {
+define(["exports", "core/utils", "core/pubsubhub"], function (_exports, _utils, _pubsubhub) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.name = undefined;
-  exports.run = run;
+  _exports.run = run;
+  _exports.name = void 0;
+
   /*jshint strict: true, browser:true, jquery: true*/
+
   /*globals define*/
   // Module w3c/style
   // Inserts a link to the appropriate W3C style for the specification's maturity level.
   // CONFIGURATION
   //  - specStatus: the short code for the specification's maturity level or type (required)
+  const name = "w3c/style";
+  _exports.name = name;
 
-  const name = exports.name = "w3c/style";
   function attachFixupScript(doc, version) {
     const script = doc.createElement("script");
+
     if (location.hash) {
       script.addEventListener("load", () => {
         window.location = location.hash;
-      }, { once: true });
+      }, {
+        once: true
+      });
     }
+
     script.src = `https://www.w3.org/scripts/TR/${version}/fixup.js`;
     doc.body.appendChild(script);
-  }
-
-  // Make a best effort to attach meta viewport at the top of the head.
+  } // Make a best effort to attach meta viewport at the top of the head.
   // Other plugins might subsequently push it down, but at least we start
   // at the right place. When ReSpec exports the HTML, it again moves the
   // meta viewport to the top of the head - so to make sure it's the first
   // thing the browser sees. See js/ui/save-html.js.
+
+
   function createMetaViewport() {
     const meta = document.createElement("meta");
     meta.name = "viewport";
@@ -52,33 +59,41 @@ define(["exports", "core/utils", "core/pubsubhub"], function (exports, _utils, _
 
   function selectStyleVersion(styleVersion) {
     let version = "";
+
     switch (styleVersion) {
       case null:
       case true:
         version = "2016";
         break;
+
       default:
         if (styleVersion && !isNaN(styleVersion)) {
           version = styleVersion.toString().trim();
         }
+
     }
+
     return version;
   }
 
   function createResourceHints() {
     const resourceHints = [{
-      hint: "preconnect", // for W3C styles and scripts.
+      hint: "preconnect",
+      // for W3C styles and scripts.
       href: "https://www.w3.org"
     }, {
-      hint: "preload", // all specs need it, and we attach it on end-all.
+      hint: "preload",
+      // all specs need it, and we attach it on end-all.
       href: "https://www.w3.org/scripts/TR/2016/fixup.js",
       as: "script"
     }, {
-      hint: "preload", // all specs include on base.css.
+      hint: "preload",
+      // all specs include on base.css.
       href: "https://www.w3.org/StyleSheets/TR/2016/base.css",
       as: "style"
     }, {
-      hint: "preload", // all specs show the logo.
+      hint: "preload",
+      // all specs show the logo.
       href: "https://www.w3.org/StyleSheets/TR/2016/logos/W3C",
       as: "image"
     }].map(_utils.createResourceHint).reduce((frag, link) => {
@@ -86,12 +101,13 @@ define(["exports", "core/utils", "core/pubsubhub"], function (exports, _utils, _
       return frag;
     }, document.createDocumentFragment());
     return resourceHints;
-  }
-  // Collect elements for insertion (document fragment)
-  const elements = createResourceHints();
+  } // Collect elements for insertion (document fragment)
 
-  // Opportunistically apply base style
+
+  const elements = createResourceHints(); // Opportunistically apply base style
+
   elements.appendChild(createBaseStyle());
+
   if (!document.head.querySelector("meta[name=viewport]")) {
     // Make meta viewport the first element in the head.
     elements.insertBefore(createMetaViewport(), elements.firstChild);
@@ -106,9 +122,8 @@ define(["exports", "core/utils", "core/pubsubhub"], function (exports, _utils, _
       (0, _pubsubhub.pub)("warn", warn);
     }
 
-    let styleFile = "W3C-";
+    let styleFile = "W3C-"; // Figure out which style file to use.
 
-    // Figure out which style file to use.
     switch (conf.specStatus.toUpperCase()) {
       case "CG-DRAFT":
       case "CG-FINAL":
@@ -116,39 +131,46 @@ define(["exports", "core/utils", "core/pubsubhub"], function (exports, _utils, _
       case "BG-FINAL":
         styleFile = conf.specStatus.toLowerCase();
         break;
+
       case "FPWD":
       case "LC":
       case "WD-NOTE":
       case "LC-NOTE":
         styleFile += "WD";
         break;
+
       case "WG-NOTE":
       case "FPWD-NOTE":
         styleFile += "WG-NOTE.css";
         break;
+
       case "UNOFFICIAL":
         styleFile += "UD";
         break;
+
       case "FINDING":
       case "FINDING-DRAFT":
       case "BASE":
         styleFile = "base.css";
         break;
+
       default:
         styleFile += conf.specStatus + ".css";
-    }
+    } // Select between released styles and experimental style.
 
-    // Select between released styles and experimental style.
-    const version = selectStyleVersion(conf.useExperimentalStyles || "2016");
-    // Attach W3C fixup script after we are done.
+
+    const version = selectStyleVersion(conf.useExperimentalStyles || "2016"); // Attach W3C fixup script after we are done.
+
     if (version && !conf.noToc) {
       (0, _pubsubhub.sub)("end-all", () => {
         attachFixupScript(doc, version);
-      }, { once: true });
+      }, {
+        once: true
+      });
     }
+
     const finalVersionPath = version ? version + "/" : "";
     const finalStyleURL = `/css/${styleFile}`;
-
     (0, _utils.linkCSS)(doc, finalStyleURL);
     cb();
   }
